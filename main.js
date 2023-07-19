@@ -1,19 +1,36 @@
-const { app, BrowserWindow, Menu, globalShortcut } = require('electron')
+const { app, BrowserWindow, Menu } = require('electron')
 
 process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV === 'development'
 const isWin = process.platform === 'win32'
 
 let mainWindow
+let aboutWindow
 function createMainWindow() {
   mainWindow = new BrowserWindow({
-    title: '图片压缩器',
-    width: 500,
+    title: '图片压缩工具',
+    width: 460,
     height: 600,
     resizable: isDev,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    },
     icon: './assets/icons/Icon_256x256.png'
   })
   mainWindow.loadFile('./app/index.html')
+}
+
+function createAboutWindow() {
+  aboutWindow = new BrowserWindow({
+    title: '图片压缩工具',
+    width: 300,
+    height: 300,
+    resizable: false,
+    icon: './assets/icons/Icon_256x256.png',
+    autoHideMenuBar: true
+  })
+  aboutWindow.loadFile('./app/about.html')
 }
 
 const menu = [
@@ -32,19 +49,22 @@ const menu = [
           ]
         }
       ]
-    : [])
+    : []),
+  {
+    label: 'Help',
+    submenu: [
+      {
+        label: 'About',
+        click: createAboutWindow
+      }
+    ]
+  }
 ]
 
 app.whenReady().then(() => {
   createMainWindow()
   const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu)
-  // 重新加载 app
-  globalShortcut.register('CmdOrCtrl+R', () => mainWindow.reload())
-  // 打开控制台
-  if (isDev) {
-    globalShortcut.register(isWin ? 'Ctrl+Shift+I' : 'Command+Alt+I', () => mainWindow.toggleDevTools())
-  }
 })
 
 app.on('activate', () => {

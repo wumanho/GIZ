@@ -4,9 +4,39 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>图片压缩工具</title>
+    <link rel="stylesheet" href="./css/all.min.css" />
+    <link rel="stylesheet" href="./css/materialize.min.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <title>优飞图片压缩工具</title>
   </head>
   <body>
-    <h1>图片压缩工具</h1>
+    <div class="container center-align">
+      <h3><i class="fas fa-images"></i>图片压缩工具</h3>
+      <p>请选择需要压缩的图片</p>
+      <form id="image-form">
+        <div class="file-field input-field">
+          <div class="btn">
+            <span>选择</span>
+            <input type="file" id="img" />
+          </div>
+          <div class="file-path-wrapper">
+            <input type="text" class="file-path validate" placeholder="上传文件" />
+          </div>
+        </div>
+        <p>
+          <strong>图片质量：</strong>
+          <em>质量越低，最终生成的图片文件越小</em>
+        </p>
+        <p class="range-field">
+          <input type="range" min="0" max="100" id="slider" />
+        </p>
+        <input type="submit" value="开始压缩" class="btn black" />
+      </form>
+      <div class="card output">
+        <div class="card-content">文件输出路径：<span id="output-path"></span></div>
+      </div>
+    </div>
+    <script src="./js/materialize.min.js"></script>
+    <script src="./js/renderer.js"></script>
   </body>
 </html>
