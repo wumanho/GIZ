@@ -1,4 +1,10 @@
-const { app, BrowserWindow, Menu } = require('electron')
+const path = require('path')
+const os = require('os')
+const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
+const imagemin = require('imagemin')
+const imageminMozjpeg = require('imagemin-mozjpeg')
+const imageminPngquant = require('imagemin-pngquant')
+const slash = require('slash')
 
 process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV === 'development'
@@ -65,6 +71,7 @@ app.whenReady().then(() => {
   createMainWindow()
   const mainMenu = Menu.buildFromTemplate(menu)
   Menu.setApplicationMenu(mainMenu)
+  if (isDev) mainWindow.webContents.openDevTools()
 })
 
 app.on('activate', () => {
@@ -75,4 +82,24 @@ app.on('activate', () => {
 
 app.on('window-all-closed', () => {
   if (isWin) app.quit()
+})
+
+async function shrinkImage({ imgPath, quality, dest }) {
+  try {
+    const pngQuality = quality / 100
+    const files = await imagemin([slash(imgPath)], {
+      destination: dest,
+      plugins: [imageminMozjpeg({ quality }), imageminPngquant({ quality: [pngQuality, pngQuality] })]
+    })
+    // 打开输出目录
+    shell.openPath(dest)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+ipcMain.on('image:minimize', (e, options) => {
+  // 设置输出目录
+  options.dest = path.join(__dirname, 'GIZ_output')
+  shrinkImage(options)
 })
