@@ -1,10 +1,10 @@
 const path = require('path')
-const os = require('os')
 const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
 const imagemin = require('imagemin')
 const imageminMozjpeg = require('imagemin-mozjpeg')
 const imageminPngquant = require('imagemin-pngquant')
 const slash = require('slash')
+const log = require('electron-log')
 
 process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV === 'development'
@@ -91,10 +91,13 @@ async function shrinkImage({ imgPath, quality, dest }) {
       destination: dest,
       plugins: [imageminMozjpeg({ quality }), imageminPngquant({ quality: [pngQuality, pngQuality] })]
     })
+    log.info(files)
     // 打开输出目录
     shell.openPath(dest)
+    // 输出事件到渲染器
+    mainWindow.webContents.send('image:done')
   } catch (e) {
-    console.error(e)
+    log.error(e)
   }
 }
 

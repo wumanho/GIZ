@@ -19,3 +19,9 @@ form.addEventListener('submit', (e) => {
     quality
   })
 })
+
+ipcRenderer.on('image:done', () => {
+  M.toast({
+    html: `图片质量已压缩至 ${slider.value}%`
+  })
+})

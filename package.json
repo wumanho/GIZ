@@ -1,19 +1,29 @@
 {
   "name": "01",
   "version": "1.0.0",
-  "description": "",
+  "description": "UFI App",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "nodemon --exec electron ."
+    "start": "electron-forge start",
+    "dev": "nodemon --exec electron .",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "author": "wumanho",
   "license": "MIT",
   "devDependencies": {
+    "@electron-forge/cli": "^6.2.1",
+    "@electron-forge/maker-deb": "^6.2.1",
+    "@electron-forge/maker-rpm": "^6.2.1",
+    "@electron-forge/maker-squirrel": "^6.2.1",
+    "@electron-forge/maker-zip": "^6.2.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
     "electron": "^25.3.0",
     "nodemon": "^3.0.1"
   },
   "dependencies": {
+    "electron-log": "^4.4.8",
+    "electron-squirrel-startup": "^1.0.0",
     "imagemin": "^7.0.1",
     "imagemin-mozjpeg": "^8.0.0",
     "imagemin-pngquant": "^8.0.0",
